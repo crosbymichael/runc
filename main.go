@@ -50,46 +50,8 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "runc"
 	app.Usage = usage
-
-	var v []string
-	if version != "" {
-		v = append(v, version)
-	}
-	if gitCommit != "" {
-		v = append(v, fmt.Sprintf("commit: %s", gitCommit))
-	}
-	v = append(v, fmt.Sprintf("spec: %s", specs.Version))
-	app.Version = strings.Join(v, "\n")
-	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "debug",
-			Usage: "enable debug output for logging",
-		},
-		cli.StringFlag{
-			Name:  "log",
-			Value: "/dev/null",
-			Usage: "set the log file path where internal debug information is written",
-		},
-		cli.StringFlag{
-			Name:  "log-format",
-			Value: "text",
-			Usage: "set the format used by logs ('text' (default), or 'json')",
-		},
-		cli.StringFlag{
-			Name:  "root",
-			Value: "/run/runc",
-			Usage: "root directory for storage of container state (this should be located in tmpfs)",
-		},
-		cli.StringFlag{
-			Name:  "criu",
-			Value: "criu",
-			Usage: "path to the criu binary used for checkpoint and restore",
-		},
-		cli.BoolFlag{
-			Name:  "systemd-cgroup",
-			Usage: "enable systemd cgroup support, expects cgroupsPath to be of form \"slice:prefix:name\" for e.g. \"system.slice:runc:434234\"",
-		},
-	}
+	app.Version = getVersion()
+	app.Flags = cmd.GlobalFlags
 	app.Commands = []cli.Command{
 		cmd.CheckpointCommand,
 		cmd.CreateCommand,
@@ -146,4 +108,16 @@ type FatalWriter struct {
 func (f *FatalWriter) Write(p []byte) (n int, err error) {
 	logrus.Error(string(p))
 	return f.cliErrWriter.Write(p)
+}
+
+func getVersion() string {
+	var v []string
+	if version != "" {
+		v = append(v, version)
+	}
+	if gitCommit != "" {
+		v = append(v, fmt.Sprintf("commit: %s", gitCommit))
+	}
+	v = append(v, fmt.Sprintf("spec: %s", specs.Version))
+	return strings.Join(v, "\n")
 }
