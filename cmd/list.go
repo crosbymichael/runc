@@ -19,9 +19,9 @@ import (
 
 const formatOptions = `table or json`
 
-// containerState represents the platform agnostic pieces relating to a
+// State represents the platform agnostic pieces relating to a
 // running container's status and state
-type containerState struct {
+type State struct {
 	// Version is the OCI version for the container
 	Version string `json:"ociVersion"`
 	// ID is the container ID
@@ -105,7 +105,7 @@ To list containers created using a non-default value for "--root":
 	},
 }
 
-func getContainers(context *cli.Context) ([]containerState, error) {
+func getContainers(context *cli.Context) ([]State, error) {
 	factory, err := loadFactory(context)
 	if err != nil {
 		return nil, err
@@ -120,7 +120,7 @@ func getContainers(context *cli.Context) ([]containerState, error) {
 		Fatal(err)
 	}
 
-	var s []containerState
+	var s []State
 	for _, item := range list {
 		if item.IsDir() {
 			container, err := factory.Load(item.Name())
@@ -143,7 +143,7 @@ func getContainers(context *cli.Context) ([]containerState, error) {
 				pid = 0
 			}
 			bundle, annotations := utils.Annotations(state.Config.Labels)
-			s = append(s, containerState{
+			s = append(s, State{
 				Version:        state.BaseState.Config.Version,
 				ID:             state.BaseState.ID,
 				InitProcessPid: pid,

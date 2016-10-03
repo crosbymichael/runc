@@ -37,7 +37,7 @@ instance of a container.`,
 			pid = 0
 		}
 		bundle, annotations := utils.Annotations(state.Config.Labels)
-		cs := containerState{
+		cs := State{
 			Version:        state.BaseState.Config.Version,
 			ID:             state.BaseState.ID,
 			InitProcessPid: pid,
