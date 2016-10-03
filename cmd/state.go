@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var stateCommand = cli.Command{
+var StateCommand = cli.Command{
 	Name:  "state",
 	Usage: "output the state of a container",
 	ArgsUsage: `<container-id>

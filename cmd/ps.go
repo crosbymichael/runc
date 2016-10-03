@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var psCommand = cli.Command{
+var PsCommand = cli.Command{
 	Name:      "ps",
 	Usage:     "ps displays the processes running inside a container",
 	ArgsUsage: `<container-id> [ps options]`,

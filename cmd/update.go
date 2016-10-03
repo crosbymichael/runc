@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ import (
 func u64Ptr(i uint64) *uint64 { return &i }
 func u16Ptr(i uint16) *uint16 { return &i }
 
-var updateCommand = cli.Command{
+var UpdateCommand = cli.Command{
 	Name:      "update",
 	Usage:     "update container resource constraints",
 	ArgsUsage: `<container-id>`,

@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"errors"
@@ -56,7 +56,7 @@ func getContainer(context *cli.Context) (libcontainer.Container, error) {
 }
 
 func fatalf(t string, v ...interface{}) {
-	fatal(fmt.Errorf(t, v...))
+	Fatal(fmt.Errorf(t, v...))
 }
 
 func getDefaultImagePath(context *cli.Context) string {

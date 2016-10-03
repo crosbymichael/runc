@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -95,7 +95,7 @@ type memory struct {
 	Raw       map[string]uint64 `json:"raw,omitempty"`
 }
 
-var eventsCommand = cli.Command{
+var EventsCommand = cli.Command{
 	Name:  "events",
 	Usage: "display container events such as OOM notifications, cpu, memory, and IO usage statistics",
 	ArgsUsage: `<container-id>

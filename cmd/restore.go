@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"os"
@@ -14,7 +14,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var restoreCommand = cli.Command{
+var RestoreCommand = cli.Command{
 	Name:  "restore",
 	Usage: "restore a container from a previous checkpoint",
 	ArgsUsage: `<container-id>
@@ -97,7 +97,7 @@ using the runc checkpoint command.`,
 				return err
 			}
 		}
-		spec, err := loadSpec(specConfig)
+		spec, err := loadSpec(Config)
 		if err != nil {
 			return err
 		}
@@ -186,7 +186,7 @@ func restoreContainer(context *cli.Context, spec *specs.Spec, config *configs.Co
 func criuOptions(context *cli.Context) *libcontainer.CriuOpts {
 	imagePath := getCheckpointImagePath(context)
 	if err := os.MkdirAll(imagePath, 0655); err != nil {
-		fatal(err)
+		Fatal(err)
 	}
 	return &libcontainer.CriuOpts{
 		ImagesDirectory:         imagePath,

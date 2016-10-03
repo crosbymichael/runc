@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var createCommand = cli.Command{
+var CreateCommand = cli.Command{
 	Name:  "create",
 	Usage: "create a container",
 	ArgsUsage: `<container-id>
@@ -15,7 +15,7 @@ Where "<container-id>" is your name for the instance of the container that you
 are starting. The name you provide for the container instance must be unique on
 your host.`,
 	Description: `The create command creates an instance of a container for a bundle. The bundle
-is a directory with a specification file named "` + specConfig + `" and a root
+is a directory with a specification file named "` + Config + `" and a root
 filesystem.
 
 The specification file includes an args parameter. The args parameter is used

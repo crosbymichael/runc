@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -15,7 +15,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var execCommand = cli.Command{
+var ExecCommand = cli.Command{
 	Name:  "exec",
 	Usage: "execute new process inside the container",
 	ArgsUsage: `<container-id> <container command> [command options]
@@ -152,7 +152,7 @@ func getProcess(context *cli.Context, bundle string) (*specs.Process, error) {
 	if err := os.Chdir(bundle); err != nil {
 		return nil, err
 	}
-	spec, err := loadSpec(specConfig)
+	spec, err := loadSpec(Config)
 	if err != nil {
 		return nil, err
 	}

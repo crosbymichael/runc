@@ -1,10 +1,10 @@
 // +build linux
 
-package main
+package cmd
 
 import "github.com/urfave/cli"
 
-var pauseCommand = cli.Command{
+var PauseCommand = cli.Command{
 	Name:  "pause",
 	Usage: "pause suspends all processes inside the container",
 	ArgsUsage: `<container-id>
@@ -26,7 +26,7 @@ Use runc list to identiy instances of containers and their current status.`,
 	},
 }
 
-var resumeCommand = cli.Command{
+var ResumeCommand = cli.Command{
 	Name:  "resume",
 	Usage: "resumes all processes that have been previously paused",
 	ArgsUsage: `<container-id>

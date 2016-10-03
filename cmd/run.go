@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 )
 
 // default action is to start a container
-var runCommand = cli.Command{
+var RunCommand = cli.Command{
 	Name:  "run",
 	Usage: "create and run a container",
 	ArgsUsage: `<container-id>
@@ -18,7 +18,7 @@ Where "<container-id>" is your name for the instance of the container that you
 are starting. The name you provide for the container instance must be unique on
 your host.`,
 	Description: `The run command creates an instance of a container for a bundle. The bundle
-is a directory with a specification file named "` + specConfig + `" and a root
+is a directory with a specification file named "` + Config + `" and a root
 filesystem.
 
 The specification file includes an args parameter. The args parameter is used

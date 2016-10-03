@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"fmt"
@@ -40,7 +40,7 @@ type containerState struct {
 	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
-var listCommand = cli.Command{
+var ListCommand = cli.Command{
 	Name:  "list",
 	Usage: "lists containers started by runc with the given root",
 	ArgsUsage: `
@@ -117,7 +117,7 @@ func getContainers(context *cli.Context) ([]containerState, error) {
 	}
 	list, err := ioutil.ReadDir(absRoot)
 	if err != nil {
-		fatal(err)
+		Fatal(err)
 	}
 
 	var s []containerState

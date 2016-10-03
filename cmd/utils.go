@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -9,9 +9,11 @@ import (
 	"github.com/urfave/cli"
 )
 
+const Config = "config.json"
+
 // fatal prints the error's details if it is a libcontainer specific error type
 // then exits the program with an exit status of 1.
-func fatal(err error) {
+func Fatal(err error) {
 	// make sure the error is written to the logger
 	logrus.Error(err)
 	fmt.Fprintln(os.Stderr, err)
@@ -26,7 +28,7 @@ func setupSpec(context *cli.Context) (*specs.Spec, error) {
 			return nil, err
 		}
 	}
-	spec, err := loadSpec(specConfig)
+	spec, err := loadSpec(Config)
 	if err != nil {
 		return nil, err
 	}

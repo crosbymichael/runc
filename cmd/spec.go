@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"encoding/json"
@@ -14,11 +14,11 @@ import (
 	"github.com/urfave/cli"
 )
 
-var specCommand = cli.Command{
+var SpecCommand = cli.Command{
 	Name:      "spec",
 	Usage:     "create a new specification file",
 	ArgsUsage: "",
-	Description: `The spec command creates the new specification file named "` + specConfig + `" for
+	Description: `The spec command creates the new specification file named "` + Config + `" for
 the bundle.
 
 The spec generated is just a starter file. Editing of the spec is required to
@@ -41,7 +41,7 @@ command in a new hello-world container named container1:
     mkdir rootfs
     tar -C rootfs -xf hello-world.tar
     runc spec
-    sed -i 's;"sh";"/hello";' ` + specConfig + `
+    sed -i 's;"sh";"/hello";' ` + Config + `
     runc run container1
 
 In the run command above, "container1" is the name for the instance of the
@@ -206,14 +206,14 @@ container on your host.`,
 				return err
 			}
 		}
-		if err := checkNoFile(specConfig); err != nil {
+		if err := checkNoFile(Config); err != nil {
 			return err
 		}
 		data, err := json.MarshalIndent(&spec, "", "\t")
 		if err != nil {
 			return err
 		}
-		if err := ioutil.WriteFile(specConfig, data, 0666); err != nil {
+		if err := ioutil.WriteFile(Config, data, 0666); err != nil {
 			return err
 		}
 		return nil

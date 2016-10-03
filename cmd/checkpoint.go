@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var checkpointCommand = cli.Command{
+var CheckpointCommand = cli.Command{
 	Name:  "checkpoint",
 	Usage: "checkpoint a running container",
 	ArgsUsage: `<container-id>
@@ -40,7 +40,7 @@ checkpointed.`,
 		}
 		status, err := container.Status()
 		if err != nil {
-			return(err)
+			return (err)
 		}
 		if status == libcontainer.Created {
 			fatalf("Container cannot be checkpointed in created state")
@@ -74,11 +74,11 @@ func setPageServer(context *cli.Context, options *libcontainer.CriuOpts) {
 	if psOpt := context.String("page-server"); psOpt != "" {
 		addressPort := strings.Split(psOpt, ":")
 		if len(addressPort) != 2 {
-			fatal(fmt.Errorf("Use --page-server ADDRESS:PORT to specify page server"))
+			Fatal(fmt.Errorf("Use --page-server ADDRESS:PORT to specify page server"))
 		}
 		portInt, err := strconv.Atoi(addressPort[1])
 		if err != nil {
-			fatal(fmt.Errorf("Invalid port number"))
+			Fatal(fmt.Errorf("Invalid port number"))
 		}
 		options.PageServer = libcontainer.CriuPageServerInfo{
 			Address: addressPort[0],
@@ -97,7 +97,7 @@ func setManageCgroupsMode(context *cli.Context, options *libcontainer.CriuOpts) 
 		case "strict":
 			options.ManageCgroupsMode = libcontainer.CRIU_CG_MODE_STRICT
 		default:
-			fatal(fmt.Errorf("Invalid manage cgroups mode"))
+			Fatal(fmt.Errorf("Invalid manage cgroups mode"))
 		}
 	}
 }

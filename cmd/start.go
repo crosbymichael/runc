@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var startCommand = cli.Command{
+var StartCommand = cli.Command{
 	Name:  "start",
 	Usage: "executes the user defined process in a created container",
 	ArgsUsage: `<container-id>

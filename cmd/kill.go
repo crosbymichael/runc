@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"fmt"
@@ -49,7 +49,7 @@ var signalMap = map[string]syscall.Signal{
 	"XFSZ":   syscall.SIGXFSZ,
 }
 
-var killCommand = cli.Command{
+var KillCommand = cli.Command{
 	Name:  "kill",
 	Usage: "kill sends the specified signal (default: SIGTERM) to the container's init process",
 	ArgsUsage: `<container-id> <signal>

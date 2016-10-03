@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/opencontainers/runc/cmd"
 	"github.com/opencontainers/runtime-spec/specs-go"
 	"github.com/urfave/cli"
 )
@@ -20,8 +21,7 @@ var version = ""
 var gitCommit = ""
 
 const (
-	specConfig = "config.json"
-	usage      = `Open Container Initiative runtime
+	usage = `Open Container Initiative runtime
 
 runc is a command line client for running applications packaged according to
 the Open Container Initiative (OCI) format and is a compliant implementation of the
@@ -33,7 +33,7 @@ existing process monitoring tools and the container will be spawned as a
 direct child of the process supervisor.
 
 Containers are configured using bundles. A bundle for a container is a directory
-that includes a specification file named "` + specConfig + `" and a root filesystem.
+that includes a specification file named "` + cmd.Config + `" and a root filesystem.
 The root filesystem contains the contents of the container.
 
 To start a new instance of a container:
@@ -91,23 +91,23 @@ func main() {
 		},
 	}
 	app.Commands = []cli.Command{
-		checkpointCommand,
-		createCommand,
-		deleteCommand,
-		eventsCommand,
-		execCommand,
-		initCommand,
-		killCommand,
-		listCommand,
-		pauseCommand,
-		psCommand,
-		restoreCommand,
-		resumeCommand,
-		runCommand,
-		specCommand,
-		startCommand,
-		stateCommand,
-		updateCommand,
+		cmd.CheckpointCommand,
+		cmd.CreateCommand,
+		cmd.DeleteCommand,
+		cmd.EventsCommand,
+		cmd.ExecCommand,
+		cmd.InitCommand,
+		cmd.KillCommand,
+		cmd.ListCommand,
+		cmd.PauseCommand,
+		cmd.PsCommand,
+		cmd.RestoreCommand,
+		cmd.ResumeCommand,
+		cmd.RunCommand,
+		cmd.SpecCommand,
+		cmd.StartCommand,
+		cmd.StateCommand,
+		cmd.UpdateCommand,
 	}
 	app.Before = func(context *cli.Context) error {
 		if context.GlobalBool("debug") {
@@ -135,7 +135,7 @@ func main() {
 	// Use our own writer here to ensure the log gets sent to the right location.
 	cli.ErrWriter = &FatalWriter{cli.ErrWriter}
 	if err := app.Run(os.Args); err != nil {
-		fatal(err)
+		cmd.Fatal(err)
 	}
 }
 

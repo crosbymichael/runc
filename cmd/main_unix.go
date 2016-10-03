@@ -1,6 +1,6 @@
 // +build linux
 
-package main
+package cmd
 
 import (
 	"os"
@@ -18,7 +18,7 @@ func init() {
 	}
 }
 
-var initCommand = cli.Command{
+var InitCommand = cli.Command{
 	Name:  "init",
 	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
 	Action: func(context *cli.Context) error {

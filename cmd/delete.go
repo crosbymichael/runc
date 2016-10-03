@@ -1,6 +1,6 @@
 // +build !solaris
 
-package main
+package cmd
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func killContainer(container libcontainer.Container) error {
 	return fmt.Errorf("container init still running")
 }
 
-var deleteCommand = cli.Command{
+var DeleteCommand = cli.Command{
 	Name:  "delete",
 	Usage: "delete any resources held by one container or more containers often used with detached containers",
 	ArgsUsage: `container-id [container-id...]
