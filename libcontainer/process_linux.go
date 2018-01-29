@@ -3,7 +3,6 @@
 package libcontainer
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -13,6 +12,7 @@ import (
 	"strconv"
 	"syscall" // only for Signal
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runc/libcontainer/intelrdt"
@@ -147,6 +147,7 @@ func (p *setnsProcess) execSetns() error {
 		return newSystemError(&exec.ExitError{ProcessState: status})
 	}
 	var pid *pid
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.NewDecoder(p.parentPipe).Decode(&pid); err != nil {
 		p.cmd.Wait()
 		return newSystemErrorWithCause(err, "reading pid from init pipe")
@@ -240,6 +241,7 @@ func (p *initProcess) execSetns() error {
 		return &exec.ExitError{ProcessState: status}
 	}
 	var pid *pid
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.NewDecoder(p.parentPipe).Decode(&pid); err != nil {
 		p.cmd.Wait()
 		return err

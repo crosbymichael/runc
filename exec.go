@@ -3,12 +3,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer"
 	"github.com/opencontainers/runc/libcontainer/utils"
 	"github.com/opencontainers/runtime-spec/specs-go"
@@ -151,6 +151,7 @@ func getProcess(context *cli.Context, bundle string) (*specs.Process, error) {
 			return nil, err
 		}
 		defer f.Close()
+		json := jsoniter.ConfigCompatibleWithStandardLibrary
 		var p specs.Process
 		if err := json.NewDecoder(f).Decode(&p); err != nil {
 			return nil, err

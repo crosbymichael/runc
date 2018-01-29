@@ -2,11 +2,11 @@ package configs
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"os/exec"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runtime-spec/specs-go"
 
 	"github.com/sirupsen/logrus"
@@ -225,6 +225,7 @@ func (hooks *Hooks) UnmarshalJSON(b []byte) error {
 		Poststop  []CommandHook
 	}
 
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.Unmarshal(b, &state); err != nil {
 		return err
 	}
@@ -257,6 +258,7 @@ func (hooks Hooks) MarshalJSON() ([]byte, error) {
 		return serializableHooks
 	}
 
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	return json.Marshal(map[string]interface{}{
 		"prestart":  serialize(hooks.Prestart),
 		"poststart": serialize(hooks.Poststart),
@@ -307,6 +309,7 @@ type CommandHook struct {
 }
 
 func (c Command) Run(s HookState) error {
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	b, err := json.Marshal(s)
 	if err != nil {
 		return err

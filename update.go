@@ -3,12 +3,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/docker/go-units"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runc/libcontainer/intelrdt"
 	"github.com/opencontainers/runtime-spec/specs-go"
@@ -169,6 +169,7 @@ other options are ignored.
 					return err
 				}
 			}
+			json := jsoniter.ConfigCompatibleWithStandardLibrary
 			err = json.NewDecoder(f).Decode(&r)
 			if err != nil {
 				return err

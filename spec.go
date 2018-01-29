@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runc/libcontainer/specconv"
 	"github.com/opencontainers/runtime-spec/specs-go"
@@ -125,6 +126,7 @@ func loadSpec(cPath string) (spec *specs.Spec, err error) {
 	}
 	defer cf.Close()
 
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err = json.NewDecoder(cf).Decode(&spec); err != nil {
 		return nil, err
 	}

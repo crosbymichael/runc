@@ -3,12 +3,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"sync"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/intelrdt"
@@ -154,6 +154,7 @@ information is displayed once every 5 seconds.`,
 		group.Add(1)
 		go func() {
 			defer group.Done()
+			json := jsoniter.ConfigCompatibleWithStandardLibrary
 			enc := json.NewEncoder(os.Stdout)
 			for e := range events {
 				if err := enc.Encode(e); err != nil {

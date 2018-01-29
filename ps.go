@@ -3,13 +3,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/urfave/cli"
 )
 
@@ -46,6 +46,7 @@ var psCommand = cli.Command{
 		switch context.String("format") {
 		case "table":
 		case "json":
+			json := jsoniter.ConfigCompatibleWithStandardLibrary
 			return json.NewEncoder(os.Stdout).Encode(pids)
 		default:
 			return fmt.Errorf("invalid format option")

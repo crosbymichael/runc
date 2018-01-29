@@ -3,7 +3,6 @@
 package libcontainer
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,6 +10,7 @@ import (
 	"runtime/debug"
 	"strconv"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/cgroups/fs"
 	"github.com/opencontainers/runc/libcontainer/cgroups/systemd"
@@ -331,6 +331,7 @@ func (l *LinuxFactory) loadState(root, id string) (*State, error) {
 	}
 	defer f.Close()
 	var state *State
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.NewDecoder(f).Decode(&state); err != nil {
 		return nil, newGenericError(err, SystemError)
 	}

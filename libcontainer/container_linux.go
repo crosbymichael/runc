@@ -4,7 +4,6 @@ package libcontainer
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -19,6 +18,7 @@ import (
 	"syscall" // only for SysProcAttr and Signal
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runc/libcontainer/criurpc"
@@ -1035,6 +1035,7 @@ func (c *linuxContainer) Checkpoint(criuOpts *CriuOpts) error {
 			c.addCriuDumpMount(req, m)
 		}
 
+		json := jsoniter.ConfigCompatibleWithStandardLibrary
 		// Write the FD info to a file in the image directory
 		fdsJSON, err := json.Marshal(c.initProcess.externalDescriptors())
 		if err != nil {
@@ -1212,6 +1213,7 @@ func (c *linuxContainer) Restore(process *Process, criuOpts *CriuOpts) error {
 		return err
 	}
 
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.Unmarshal(fdJSON, &fds); err != nil {
 		return err
 	}

@@ -3,13 +3,13 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"encoding/json"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"unsafe"
 
+	jsoniter "github.com/json-iterator/go"
 	"golang.org/x/sys/unix"
 )
 
@@ -51,6 +51,7 @@ func ExitStatus(status unix.WaitStatus) int {
 
 // WriteJSON writes the provided struct v to w using standard json marshaling
 func WriteJSON(w io.Writer, v interface{}) error {
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	data, err := json.Marshal(v)
 	if err != nil {
 		return err

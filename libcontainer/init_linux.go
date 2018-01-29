@@ -3,7 +3,6 @@
 package libcontainer
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net"
@@ -15,6 +14,7 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/containerd/console"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer/cgroups"
 	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runc/libcontainer/system"
@@ -73,6 +73,7 @@ type initer interface {
 
 func newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, fifoFd int) (initer, error) {
 	var config *initConfig
+	json := jsoniter.ConfigCompatibleWithStandardLibrary
 	if err := json.NewDecoder(pipe).Decode(&config); err != nil {
 		return nil, err
 	}

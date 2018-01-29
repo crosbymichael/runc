@@ -11,8 +11,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"encoding/json"
-
+	jsoniter "github.com/json-iterator/go"
 	"github.com/opencontainers/runc/libcontainer"
 	"github.com/opencontainers/runc/libcontainer/user"
 	"github.com/opencontainers/runc/libcontainer/utils"
@@ -103,6 +102,7 @@ To list containers created using a non-default value for "--root":
 				return err
 			}
 		case "json":
+			json := jsoniter.ConfigCompatibleWithStandardLibrary
 			if err := json.NewEncoder(os.Stdout).Encode(s); err != nil {
 				return err
 			}
