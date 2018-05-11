@@ -71,7 +71,7 @@ type initer interface {
 	Init() error
 }
 
-func newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, fifoFd int) (initer, error) {
+func newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, fifoFd int, execatFD *os.File) (initer, error) {
 	var config *initConfig
 	if err := json.NewDecoder(pipe).Decode(&config); err != nil {
 		return nil, err
@@ -85,6 +85,7 @@ func newContainerInit(t initType, pipe *os.File, consoleSocket *os.File, fifoFd 
 			pipe:          pipe,
 			consoleSocket: consoleSocket,
 			config:        config,
+			execatFD:      execatFD,
 		}, nil
 	case initStandard:
 		return &linuxStandardInit{

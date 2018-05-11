@@ -449,6 +449,10 @@ func (c *linuxContainer) newParentProcess(p *Process, doInit bool) (parentProces
 		return nil, newSystemErrorWithCause(err, "creating new command template")
 	}
 	if !doInit {
+		if p.ExecatFD != nil {
+			cmd.ExtraFiles = append(cmd.ExtraFiles, p.ExecatFD)
+			cmd.Env = append(cmd.Env, fmt.Sprintf("_LIBCONTAINER_EXECATFD=%d", stdioFdCount+len(cmd.ExtraFiles)-1))
+		}
 		return c.newSetnsProcess(p, cmd, parentPipe, childPipe)
 	}
 

@@ -256,9 +256,11 @@ func (l *LinuxFactory) StartInitialization() (err error) {
 	var (
 		pipefd, fifofd int
 		consoleSocket  *os.File
+		execatFD       *os.File
 		envInitPipe    = os.Getenv("_LIBCONTAINER_INITPIPE")
 		envFifoFd      = os.Getenv("_LIBCONTAINER_FIFOFD")
 		envConsole     = os.Getenv("_LIBCONTAINER_CONSOLE")
+		envExecatFD    = os.Getenv("_LIBCONTAINER_EXECATFD")
 	)
 
 	// Get the INITPIPE.
@@ -279,6 +281,14 @@ func (l *LinuxFactory) StartInitialization() (err error) {
 		if fifofd, err = strconv.Atoi(envFifoFd); err != nil {
 			return fmt.Errorf("unable to convert _LIBCONTAINER_FIFOFD=%s to int: %s", envFifoFd, err)
 		}
+	}
+	if envExecatFD != "" {
+		fd, err := strconv.Atoi(envExecatFD)
+		if err != nil {
+			return fmt.Errorf("unable to convert _LIBCONTAINER_EXECATFD=%s to int: %s", envExecatFD, err)
+		}
+		execatFD = os.NewFile(uintptr(fd), "execatfd")
+		defer unix.Close(fd)
 	}
 
 	if envConsole != "" {
@@ -312,7 +322,7 @@ func (l *LinuxFactory) StartInitialization() (err error) {
 		}
 	}()
 
-	i, err := newContainerInit(it, pipe, consoleSocket, fifofd)
+	i, err := newContainerInit(it, pipe, consoleSocket, fifofd, execatFD)
 	if err != nil {
 		return err
 	}

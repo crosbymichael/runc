@@ -248,6 +248,7 @@ type runner struct {
 	detach          bool
 	listenFDs       []*os.File
 	preserveFDs     int
+	execatFD        int
 	pidFile         string
 	consoleSocket   string
 	container       libcontainer.Container
@@ -273,6 +274,9 @@ func (r *runner) run(config *specs.Process) (int, error) {
 	baseFd := 3 + len(process.ExtraFiles)
 	for i := baseFd; i < baseFd+r.preserveFDs; i++ {
 		process.ExtraFiles = append(process.ExtraFiles, os.NewFile(uintptr(i), "PreserveFD:"+strconv.Itoa(i)))
+	}
+	if r.execatFD != 0 {
+		process.ExecatFD = os.NewFile(uintptr(r.execatFD), "ExecatFD:"+strconv.Itoa(r.execatFD))
 	}
 	rootuid, err := r.container.Config().HostRootUID()
 	if err != nil {

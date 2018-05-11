@@ -72,6 +72,8 @@ type Process struct {
 	// ConsoleSocket provides the masterfd console.
 	ConsoleSocket *os.File
 
+	ExecatFD *os.File
+
 	ops processOperations
 }
 

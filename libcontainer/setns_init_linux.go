@@ -11,6 +11,7 @@ import (
 	"github.com/opencontainers/runc/libcontainer/seccomp"
 	"github.com/opencontainers/runc/libcontainer/system"
 	"github.com/opencontainers/selinux/go-selinux/label"
+	"github.com/pkg/errors"
 
 	"golang.org/x/sys/unix"
 )
@@ -20,6 +21,7 @@ import (
 type linuxSetnsInit struct {
 	pipe          *os.File
 	consoleSocket *os.File
+	execatFD      *os.File
 	config        *initConfig
 }
 
@@ -70,6 +72,11 @@ func (l *linuxSetnsInit) Init() error {
 	if l.config.Config.Seccomp != nil && l.config.NoNewPrivileges {
 		if err := seccomp.InitSeccomp(l.config.Config.Seccomp); err != nil {
 			return newSystemErrorWithCause(err, "init seccomp")
+		}
+	}
+	if l.execatFD != nil {
+		if err := system.Execveat(int(l.execatFD.Fd()), "", l.config.Args, os.Environ(), unix.AT_EMPTY_PATH); err != nil {
+			return errors.Wrap(err, "execveat")
 		}
 	}
 	return system.Execv(l.config.Args[0], l.config.Args[0:], os.Environ())

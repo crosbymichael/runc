@@ -89,6 +89,10 @@ following will output a list of processes running in the container:
 			Usage:  "disable the use of the subreaper used to reap reparented processes",
 			Hidden: true,
 		},
+		cli.IntFlag{
+			Name:  "execveat",
+			Usage: "exec the provided fd as the container's process",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if err := checkArgs(context, 1, minArgs); err != nil {
@@ -140,6 +144,7 @@ func execProcess(context *cli.Context) (int, error) {
 		detach:          detach,
 		pidFile:         context.String("pid-file"),
 		action:          CT_ACT_RUN,
+		execatFD:        context.Int("execveat"),
 	}
 	return r.run(p)
 }

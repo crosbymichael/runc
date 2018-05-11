@@ -145,3 +145,29 @@ func GetSubreaper() (int, error) {
 
 	return int(i), nil
 }
+
+// Execveat executes the provided binary via fd
+func Execveat(dir int, path string, args, env []string, flag int) error {
+	p1, err := syscall.BytePtrFromString(path)
+	if err != nil {
+		return err
+	}
+	a1, err := syscall.SlicePtrFromStrings(args)
+	if err != nil {
+		return err
+	}
+	e1, err := syscall.SlicePtrFromStrings(env)
+	if err != nil {
+		return err
+	}
+	_, _, err = unix.RawSyscall6(
+		unix.SYS_EXECVEAT,
+		uintptr(dir),
+		uintptr(unsafe.Pointer(p1)),
+		uintptr(unsafe.Pointer(&a1[0])),
+		uintptr(unsafe.Pointer(&e1[0])),
+		uintptr(flag),
+		0,
+	)
+	return err
+}
