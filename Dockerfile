@@ -1,4 +1,4 @@
-FROM golang:1.10-stretch
+FROM golang:1.10-stretch as builder
 
 RUN dpkg --add-architecture armel \
     && dpkg --add-architecture armhf \
@@ -68,3 +68,9 @@ ADD . /go/src/github.com/opencontainers/runc
 
 RUN . tests/integration/multi-arch.bash \
     && curl -o- -sSL `get_busybox` | tar xfJC - ${ROOTFS}
+
+RUN make BUILDTAGS='seccomp apparmor'
+
+FROM scratch
+
+COPY --from=builder /go/src/github.com/opencontainers/runc/runc /bin/runc
